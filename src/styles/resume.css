@@ -1,0 +1,754 @@
+/* ─────────────────────────────────────────────────────────────
+   简历纸面排版 + 打印契约
+   本文件只负责「纸上」的样式，编辑器 UI 一律走 Tailwind / index.css。
+   尺寸：屏幕 px 由 --base 派生；打印 mm 由 @page 注入的页边距控制。
+   ───────────────────────────────────────────────────────────── */
+
+.page-sheet {
+  --c-ink: #1b1c1f;
+  --c-body: #303136;
+  --c-muted: #5c5d63;
+  --c-faint: #8b8c92;
+  --c-rule: #e3e3e0;
+  --c-chip: #f4f4f2;
+  --c-chip-border: #e6e6e3;
+}
+
+/* 模块间距由 .blk 统一控制，纸面元素自身不再产生块间距 */
+.page-sheet .rblock {
+  margin: 0;
+}
+
+/* ── 基本信息 ─────────────────────────────────────────────── */
+
+.rprofile {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.ravatar {
+  flex: 0 0 auto;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.rprofile-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.rname {
+  font-size: calc(var(--base) * 1.72);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: 0.4px;
+  color: var(--c-ink);
+}
+
+.rheadline {
+  margin-top: 3px;
+  font-size: calc(var(--base) * 0.96);
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.rcontact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: calc(var(--base) * 0.85);
+  color: var(--c-muted);
+}
+
+.rcontact li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+}
+
+.rcontact li span {
+  overflow-wrap: anywhere;
+}
+
+.ricon {
+  flex: 0 0 auto;
+  color: var(--c-faint);
+}
+
+/* ── 章节标题 ─────────────────────────────────────────────── */
+
+.rsec-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 7px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--c-rule);
+  font-size: calc(var(--base) * 0.96);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--c-ink);
+}
+
+.rsec-icon {
+  display: inline-flex;
+  color: var(--accent);
+}
+
+.tpl-modern .rsec-title {
+  padding-left: 9px;
+  padding-bottom: 2px;
+  border-bottom: 0;
+  position: relative;
+}
+
+.tpl-modern .rsec-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.18em;
+  bottom: 0.18em;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.tpl-modern .rsec-icon {
+  display: none;
+}
+
+.tpl-compact .rsec-title {
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+  font-size: calc(var(--base) * 0.9);
+  letter-spacing: 0.14em;
+}
+
+/* ── 段落 ─────────────────────────────────────────────────── */
+
+.rprose {
+  font-size: calc(var(--base) * 0.95);
+  line-height: var(--lh);
+  color: var(--c-body);
+  text-align: justify;
+}
+
+.rprose p {
+  margin: 0;
+}
+
+.rprose p + p {
+  margin-top: 3px;
+}
+
+/* ── 条目 ─────────────────────────────────────────────────── */
+
+.rlist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--item-gap, 11px);
+}
+
+.ritem-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ritem-lead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 7px;
+  min-width: 0;
+}
+
+.ritem-title {
+  font-size: calc(var(--base) * 1.01);
+  font-weight: 600;
+  color: var(--c-ink);
+}
+
+.ritem-sub {
+  font-size: calc(var(--base) * 0.92);
+  color: var(--c-muted);
+}
+
+.ritem-meta {
+  font-size: calc(var(--base) * 0.85);
+  color: var(--c-faint);
+}
+
+.ritem-date {
+  flex: 0 0 auto;
+  font-size: calc(var(--base) * 0.85);
+  color: var(--c-faint);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ritem-note {
+  margin-top: 3px;
+  font-size: calc(var(--base) * 0.9);
+  color: var(--c-muted);
+}
+
+.ritem-desc {
+  margin-top: 3px;
+  font-size: calc(var(--base) * 0.92);
+  color: var(--c-body);
+}
+
+/* ── 要点列表 ─────────────────────────────────────────────── */
+
+.rbullets {
+  margin: 3px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rbullets li {
+  position: relative;
+  padding-left: 11px;
+  font-size: calc(var(--base) * 0.93);
+  line-height: var(--lh);
+  color: var(--c-body);
+}
+
+.rbullets li::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 0.62em;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--c-faint);
+}
+
+.rbullets li + li {
+  margin-top: 2px;
+}
+
+.tpl-compact .rbullets li + li {
+  margin-top: 1px;
+}
+
+/* ── 技能 / 标签 ──────────────────────────────────────────── */
+
+.rskills {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.rskill-label {
+  margin-bottom: 2px;
+  font-size: calc(var(--base) * 0.82);
+  letter-spacing: 0.04em;
+  color: var(--c-faint);
+}
+
+.rtags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.rtags span {
+  padding: 1px 6px;
+  border: 1px solid var(--c-chip-border);
+  border-radius: 4px;
+  background: var(--c-chip);
+  font-size: calc(var(--base) * 0.82);
+  line-height: 1.6;
+  color: #3d3e43;
+  white-space: nowrap;
+}
+
+.rtech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 8px;
+  margin-top: 3px;
+  font-size: calc(var(--base) * 0.82);
+  color: var(--c-faint);
+}
+
+/* ── 紧凑行（奖项 / 证书 / 语言） ────────────────────────── */
+
+.rrows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rrows li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rrow-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 6px;
+  min-width: 0;
+}
+
+.rrow-title {
+  font-size: calc(var(--base) * 0.93);
+  font-weight: 500;
+  color: var(--c-ink);
+}
+
+.rrow-sub {
+  font-size: calc(var(--base) * 0.83);
+  color: var(--c-faint);
+}
+
+.rrow-date {
+  flex: 0 0 auto;
+  font-size: calc(var(--base) * 0.82);
+  color: var(--c-faint);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 双栏模板的侧栏底色 ──────────────────────────────────── */
+
+.tpl-modern.mode-sidebar-right .pcol-side,
+.tpl-modern.mode-sidebar-left .pcol-side {
+  background: #f7f8fa;
+  border-radius: 5px;
+  padding: 12px 12px;
+}
+
+.tpl-modern.mode-sidebar-right .pcol-main,
+.tpl-modern.mode-sidebar-left .pcol-main {
+  padding-top: 2px;
+}
+
+/* 侧栏里字号与间距略收，避免窄栏折行过碎 */
+.pcol-side .rbullets li {
+  font-size: calc(var(--base) * 0.9);
+}
+
+.pcol-side .ritem-head {
+  flex-wrap: wrap;
+  gap: 0 6px;
+}
+
+.pcol-side .rname {
+  font-size: calc(var(--base) * 1.45);
+}
+
+
+/* ── 模板：雅致 ─────────────────────────────────────────────── */
+
+.tpl-elegant .rname {
+  font-size: calc(var(--base) * 1.86);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+}
+
+.tpl-elegant .rheadline {
+  letter-spacing: 0.12em;
+  font-weight: 400;
+}
+
+.tpl-elegant .rsec-title {
+  border-bottom: 1px solid var(--c-rule);
+  padding-bottom: 5px;
+  margin-bottom: 8px;
+  font-size: calc(var(--base) * 0.88);
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-indent: 0.26em;
+}
+
+/* 雅致的居中版式只在单栏下成立：双栏里居中标题会显得左右失衡 */
+.page-columns.mode-single.tpl-elegant .rprofile {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 9px;
+}
+
+.page-columns.mode-single.tpl-elegant .rcontact {
+  justify-content: center;
+}
+
+.page-columns.mode-single.tpl-elegant .rsec-title {
+  justify-content: center;
+}
+
+.tpl-elegant .rsec-icon {
+  display: none;
+}
+
+.tpl-elegant .rtags span {
+  background: none;
+  border-color: var(--c-rule);
+  border-radius: 2px;
+}
+
+.tpl-elegant .ravatar {
+  width: 72px;
+  height: 72px;
+}
+
+/* ── 模板：醒目 ─────────────────────────────────────────────── */
+
+.tpl-bold .rname {
+  font-size: calc(var(--base) * 2.24);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+.tpl-bold .rheadline {
+  font-weight: 600;
+  color: var(--c-muted);
+}
+
+.tpl-bold .rsec-title {
+  border: 0;
+  border-radius: 3px;
+  background: var(--accent);
+  color: #fff;
+  padding: 3px 9px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.tpl-bold .rsec-icon {
+  color: #fff;
+  opacity: 0.9;
+}
+
+.tpl-bold .ravatar {
+  border-radius: 10px;
+}
+
+.tpl-bold .rtags span {
+  background: #fff;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tpl-bold .ritem-title {
+  font-weight: 700;
+}
+
+/* ── 模板：极简 ─────────────────────────────────────────────── */
+
+.tpl-minimal .rname {
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.tpl-minimal .rheadline {
+  color: var(--c-muted);
+  font-weight: 400;
+}
+
+.tpl-minimal .rsec-title {
+  border: 0;
+  padding: 0;
+  margin-bottom: 3px;
+  font-size: calc(var(--base) * 0.8);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--c-faint);
+}
+
+.tpl-minimal .rsec-icon {
+  display: none;
+}
+
+.tpl-minimal .ravatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 3px;
+}
+
+.tpl-minimal .rtags {
+  gap: 0 6px;
+}
+
+.tpl-minimal .rtags span {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c-body);
+}
+
+.tpl-minimal .rtags span + span::before {
+  content: "·";
+  margin-right: 6px;
+  color: var(--c-faint);
+}
+
+.tpl-minimal .rbullets li::before {
+  width: 2px;
+  height: 2px;
+}
+
+.tpl-minimal .ritem-title {
+  font-weight: 500;
+}
+
+/* ── 模板：时间线 ───────────────────────────────────────────── */
+
+.tpl-timeline .pcol-main .rlist {
+  border-left: 1.5px solid var(--c-rule);
+  margin-left: 3px;
+  padding-left: 14px;
+}
+
+.tpl-timeline .pcol-main .ritem {
+  position: relative;
+}
+
+.tpl-timeline .pcol-main .ritem::before {
+  content: "";
+  position: absolute;
+  left: -19px;
+  top: 0.42em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid var(--accent);
+}
+
+.tpl-timeline .rsec-title {
+  letter-spacing: 0.1em;
+}
+
+.tpl-timeline .rsec-icon {
+  display: none;
+}
+
+/* ── 窄栏适配：侧栏只有主栏一半宽，头像横排会挤掉联系方式 ──── */
+
+.pcol-side .rprofile {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 8px;
+}
+
+.pcol-side .rcontact {
+  justify-content: flex-start;
+  gap: 2px 10px;
+  font-size: calc(var(--base) * 0.8);
+}
+
+.pcol-side .ravatar {
+  width: 56px;
+  height: 56px;
+}
+
+.tpl-elegant .pcol-side .rsec-title {
+  letter-spacing: 0.14em;
+  text-indent: 0;
+}
+
+.tpl-elegant .pcol-side .rname {
+  letter-spacing: 0.16em;
+  text-indent: 0.16em;
+}
+
+.tpl-bold .pcol-side .rname {
+  font-size: calc(var(--base) * 1.68);
+}
+
+.tpl-minimal .pcol-side .ravatar {
+  width: 48px;
+  height: 48px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   打印契约
+   ───────────────────────────────────────────────────────────── */
+
+/* 默认页型兜底：即使脚本注入的 @page 未生效，也保证输出是 A4 */
+@page {
+  size: 210mm 297mm;
+  margin: 15mm;
+}
+
+@media print {
+  html,
+  body {
+    height: auto !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .app-header,
+  .palette,
+  .inspector,
+  .page-meter,
+  .page-empty,
+  .app-modal-root {
+    display: none !important;
+  }
+
+  .app,
+  .workspace,
+  .stage {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #fff !important;
+  }
+
+  .stage-inner {
+    zoom: 1 !important;
+    display: block !important;
+  }
+
+  .page-sheet {
+    width: auto !important;
+    min-height: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+
+  .page-inner {
+    padding: 0 !important;
+  }
+
+  .page-guides,
+  .blk-tools,
+  .blk-handle,
+  .pcol-add,
+  .pcol-empty,
+  .blk-placeholder {
+    display: none !important;
+  }
+
+  .blk {
+    margin-top: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    opacity: 1 !important;
+  }
+
+  .blk + .blk {
+    margin-top: var(--blk-gap) !important;
+  }
+
+  .blk.is-hidden,
+  .blk.is-empty {
+    display: none !important;
+  }
+
+  .blk.is-hidden::after {
+    display: none !important;
+  }
+
+  /* 分页规则：条目与标题整体保留，正文允许自然流动 */
+  .rsec-title {
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
+
+  .rprofile,
+  .ritem,
+  .rrows li,
+  .rbullets li,
+  .rskill-group,
+  .rtags span {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .rblock {
+    break-inside: auto;
+  }
+
+  .pcol-side {
+    break-inside: auto;
+  }
+}
+
+/* ATS 安全模式：单栏 + 去色块，保证解析顺序与纯文本可读性 */
+@media print {
+  body.print-ats .page-columns {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+
+  body.print-ats .pcol-main {
+    order: 1;
+    flex: none !important;
+    width: auto !important;
+    padding: 0 !important;
+  }
+
+  body.print-ats .pcol-side {
+    order: 2;
+    flex: none !important;
+    width: auto !important;
+    background: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.print-ats .rtags span {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #000;
+  }
+
+  body.print-ats .rtags {
+    gap: 0 8px;
+  }
+
+  body.print-ats .rname,
+  body.print-ats .rsec-title,
+  body.print-ats .rheadline,
+  body.print-ats .rsec-icon {
+    color: #000 !important;
+  }
+
+  body.print-ats .rsec-title::before,
+  body.print-ats .rbullets li::before {
+    background: #000 !important;
+  }
+
+  body.print-ats .ricon {
+    display: none !important;
+  }
+}
